@@ -28,7 +28,7 @@ export default class ServiceApp {
                 {
                     text: message,
                     lc: this.region,
-                    // keys: this.simSimiApiKeys
+                    keys: this.simSimiApiKeys
                 },
                 {
                     headers: {
