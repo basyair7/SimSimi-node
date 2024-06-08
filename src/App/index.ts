@@ -17,11 +17,6 @@ export default class ServiceApp {
         this.bot = new TelegramBot(this.TeleBotToken, { polling: true });
     }
 
-    public run() {
-        this.bot.on("message", this.handleMessage.bind(this));
-        console.log("Bot is running...");
-    }
-
     private async handleMessage(msg: TelegramBot.Message) {
         const chatId: number = msg.chat.id;
         try {
@@ -41,7 +36,8 @@ export default class ServiceApp {
 
             const botReply: string = response.data.message;
             this.bot.sendMessage(chatId, botReply);
-        } catch (error) {
+        } 
+        catch (error) {
             if(axios.isAxiosError(error)) {
                 // console.error(`Axios error: ${error.response?.data}`);
 
@@ -59,5 +55,10 @@ export default class ServiceApp {
                 console.error(error);
             }
         }
+    }
+
+    public run() {
+        this.bot.on("message", this.handleMessage.bind(this));
+        console.log("Bot is running...");
     }
 }
