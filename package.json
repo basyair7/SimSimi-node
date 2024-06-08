@@ -2,11 +2,12 @@
   "name": "simisimi-ahul",
   "version": "1.0.0",
   "description": "bot gabut :v",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
     "build": "tsc",
     "test": "nodemon dist/server.js",
-    "start": "tsc && node dist/server.js",
+    "start": "nodemon --config nodemon.js src/server.ts",
+    "startjs": "tsc && node dist/server.js",
     "nodemon": "tsc && nodemon dist/server.js"
   },
   "author": "basyair7",

@@ -1,4 +1,6 @@
-import ServiceApp from "./App"
+import dotenv from "dotenv"
+import { resolve } from "path"
 
-const bot: ServiceApp = new ServiceApp();
-bot.run();
+dotenv.config({ path: resolve(__dirname, '..', '.env') });
+
+import "./App"
