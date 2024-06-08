@@ -27,8 +27,11 @@ export default class ServiceApp {
         try {
             const message: string = msg.text?.toString()!;
             const response = await axios.post(this.simSimiApiUrl,
-                // `text=${message}&lc=${this.region}&key=${this.simSimiApiKeys}`,
-                `text=${message}&lc=${this.region}`,
+                {
+                    text: message,
+                    lc: this.region,
+                    // keys: this.simSimiApiKeys
+                },
                 {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
