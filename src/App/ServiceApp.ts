@@ -60,7 +60,7 @@ export default class ServiceApp {
         }
     }
 
-    public run() {
+    public run(): void {
         this.bot.on("message", this.handleMessage.bind(this));
         console.log("Bot is running...");
     }
