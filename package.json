@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "test": "nodemon dist/server.js",
+    ".": "nodemon --config nodemon.js src/server.ts",
     "start": "nodemon --config nodemon.js src/server.ts",
     "startjs": "tsc && node dist/server.js",
     "nodemon": "tsc && nodemon dist/server.js"
