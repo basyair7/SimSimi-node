@@ -10,8 +10,8 @@ class KeyManager implements Keys {
         this.TeleBotToken = process.env.TELEBOT_TOKEN ?? 'nil';
         this.SimSimiAPIUrl = process.env.SIMSIMI_APIURL ?? 'nil';
         this.SimSimiApiKeys = process.env.SIMSIMI_APIKEYS ?? 'nil';
-        this.RegionSimSimi = process.env.REGION ?? 'nill';
-        
+        this.RegionSimSimi = process.env.REGION ?? 'nil';
+
         this.validateKeys();
     }
 

@@ -4,13 +4,14 @@ import KeyManager from "../keys";
 
 export default class ServiceApp {
     private bot: TelegramBot;
-    private keys: KeyManager = KeyManager.getInstance();
+    private keys: KeyManager;
     private TeleBotToken: string;
     private simSimiApiUrl: string;
     private simSimiApiKeys: string;
     private region: string;
 
     constructor() {
+        this.keys = KeyManager.getInstance();
         this.TeleBotToken = this.keys.TeleBotToken;
         this.simSimiApiUrl = this.keys.SimSimiAPIUrl;
         this.simSimiApiKeys = this.keys.SimSimiApiKeys;
