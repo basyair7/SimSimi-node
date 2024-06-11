@@ -2,9 +2,9 @@ const telebot = require("node-telegram-bot-api");
 const axios = require("axios");
 require("dotenv").config();
 
-const TOKEN = process.env.TelebotTOKEN;
-const API = process.env.SimSimiAPI;
-const URL = process.env.UrlSimSimi;
+const TOKEN = process.env.TELEBOT_TOKEN;
+const API = process.env.SIMSIMI_APIKEYS;
+const URL = process.env.SIMSIMI_APIURL;
 
 const bot = new telebot(TOKEN, { polling: true });
 
