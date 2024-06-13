@@ -1,6 +1,10 @@
 import TelegramBot from "node-telegram-bot-api"
 import { MessageHandler } from "../handles/MessageHandler"
-import { HelpCommand, StartCommand, CommandHandler, EnableSimSimi, DisableSimSimi } from "../commands"
+import { CommandHandler } from "../handles/CommandHandler"
+import HelpCommand from "../commands/HelpCommand"
+import DisableSimSimi from "../commands/DisableSimSimi"
+import EnableSimSimi from "../commands/EnableSimSimi"
+import StartCommand from "../commands/StartCommand"
 
 export default class ServiceApp {
     private bot: TelegramBot;
@@ -23,6 +27,8 @@ export default class ServiceApp {
         this.commands = [
             new HelpCommand(),
             new StartCommand(),
+            new EnableSimSimi(),
+            new DisableSimSimi(),
         ];
 
         this.simsimiEnable = false;

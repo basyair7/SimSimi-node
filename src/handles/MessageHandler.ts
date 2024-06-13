@@ -1,5 +1,5 @@
 import TelegramBot, { Message } from "node-telegram-bot-api"
-import { SimSimiCommand } from "../commands";
+import { SimSimiCommand } from "./SimSimiCommands";
 
 export class MessageHandler {
     private simSimiCommand: SimSimiCommand;

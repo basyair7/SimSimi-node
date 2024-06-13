@@ -1,7 +1,8 @@
 import TelegramBot from "node-telegram-bot-api"
-import { CommandHandler } from "./CommandHandler"
+import { CommandHandler } from "../handles/CommandHandler"
 
-export class DisableSimSimi implements CommandHandler {
+export default class DisableSimSimi implements CommandHandler {
+    readonly id = 3;
     readonly name = "simsimi_disable";
     readonly description: string = "Disable SimSimi response";
 
@@ -11,7 +12,7 @@ export class DisableSimSimi implements CommandHandler {
         this.enable = false;
     }
 
-    execute(bot: TelegramBot, msg: TelegramBot.Message): void {
+    execute(bot: TelegramBot, msg: TelegramBot.Message, match: RegExpExecArray | null): void {
         this.enable = false;
         const chatId = msg.chat.id;
         bot.sendMessage(chatId, "SimSimi has been Disabled.");
