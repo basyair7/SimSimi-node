@@ -1,0 +1,14 @@
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+OK. Send me a list of commands for your bot. Please use this format:
+
+command1 - Description
+command2 - Another description
+
+Send /empty to keep the list empty.
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+copy text dibawah ini dan kirim ke BotFather : 
+help - Get help
+simsimi_enable - Enable SimSimi response
+simsimi_disable - Disable SimSimi response

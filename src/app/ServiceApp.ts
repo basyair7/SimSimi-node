@@ -1,67 +1,58 @@
-import axios from "axios"
 import TelegramBot from "node-telegram-bot-api"
+import { MessageHandler } from "../handles/MessageHandler"
+import { HelpCommand, StartCommand, CommandHandler, EnableSimSimi, DisableSimSimi } from "../commands"
 
 export default class ServiceApp {
     private bot: TelegramBot;
     private TeleBotToken: string;
-    private simSimiApiUrl: string;
-    private simSimiApiKeys: string;
-    private region: string;
+    private TeleBotUsername: string;
+    private messageHandler: MessageHandler;
+    private commands: CommandHandler[];
+    private simsimiEnable: boolean;
 
-    constructor(TeleBotToken: string, SimSimiAPIUrl: string, SimSimiAPIKeys: string, RegionSimSimi: string) {
+    constructor(TeleBotToken: string, TeleBotUsername: string, SimSimiAPIUrl: string, SimSimiAPIKeys: string, RegionSimSimi: string) {
+        // initializing bot
         this.TeleBotToken = TeleBotToken;
-        this.simSimiApiUrl = SimSimiAPIUrl;
-        this.simSimiApiKeys = SimSimiAPIKeys;
-        this.region = RegionSimSimi;
-
+        this.TeleBotUsername = TeleBotUsername;
         this.bot = new TelegramBot(this.TeleBotToken, { polling: true });
+
+        // initializing message handler
+        this.messageHandler = new MessageHandler(SimSimiAPIUrl, SimSimiAPIKeys, RegionSimSimi);
+        
+        // initializing commands
+        this.commands = [
+            new HelpCommand(),
+            new StartCommand(),
+        ];
+
+        this.simsimiEnable = false;
     }
 
-    private async handleMessage(msg: TelegramBot.Message) {
-        const chatId: number = msg.chat.id;
-        try {
-            const message: string = msg.text?.toString()!;
-            
-            if(message.startsWith("/")) return;
-            
-            const response = await axios.post(this.simSimiApiUrl,
-                {
-                    text: message,
-                    lc: this.region,
-                    keys: this.simSimiApiKeys
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
+    private commandRegExp(command: string): RegExp {
+        return new RegExp(`^/${command}(?:@${this.TeleBotUsername})?(?:\\s+(.*))?$`, 'i');
+    }
+
+    private initialize(): void {
+        this.bot.on('polling_error', (error) => {
+            console.error('Polling error:', error);
+        });
+        this.commands.forEach(command => {
+            this.bot.onText(this.commandRegExp(command.name), (msg, match) => {
+                if(command instanceof EnableSimSimi || command instanceof DisableSimSimi) {
+                    this.simsimiEnable = command instanceof EnableSimSimi;
                 }
-            );
-
-            const botReply: string = response.data.message;
-            this.bot.sendMessage(chatId, botReply);
-        } 
-        catch (error) {
-            if(axios.isAxiosError(error)) {
-                // console.error(`Axios error: ${error.response?.data}`);
-
-                // get error message
-                const errorData = error.response?.data;
-                const errorMessage = errorData?.message || "Unknown error occurred";
-                const errorCode = errorData?.status || "No status code";
-
-                // Mengirim pesan error
-                console.error(`Axios error: ${errorMessage} (Status code : ${errorCode})`);
-                this.bot.sendMessage(chatId, errorMessage);
+                command.execute(this.bot, msg, match);
+            });
+        });
+        this.bot.on("message", msg => {
+            if(msg.text && !msg.text.startsWith('/') && this.simsimiEnable) {
+                this.messageHandler.handle(this.bot, msg);
             }
-            
-            else {
-                console.error(error);
-            }
-        }
+        });
     }
 
     public run(): void {
-        this.bot.on("message", this.handleMessage.bind(this));
+        this.initialize();
         console.log("Bot is running...");
     }
 }

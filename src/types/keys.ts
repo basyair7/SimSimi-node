@@ -5,7 +5,8 @@ interface SimSimiKeysType {
 }
 
 interface TelegramKeysType {
-    TeleBotToken: string
+    TeleBotToken: string,
+    TeleBotUsername: string
 }
 
 export {SimSimiKeysType, TelegramKeysType};
