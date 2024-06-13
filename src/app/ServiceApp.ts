@@ -1,21 +1,18 @@
 import axios from "axios"
 import TelegramBot from "node-telegram-bot-api"
-import KeyManager from "../keys";
 
 export default class ServiceApp {
     private bot: TelegramBot;
-    private keys: KeyManager;
     private TeleBotToken: string;
     private simSimiApiUrl: string;
     private simSimiApiKeys: string;
     private region: string;
 
-    constructor() {
-        this.keys = KeyManager.getInstance();
-        this.TeleBotToken = this.keys.TeleBotToken;
-        this.simSimiApiUrl = this.keys.SimSimiAPIUrl;
-        this.simSimiApiKeys = this.keys.SimSimiApiKeys;
-        this.region = this.keys.RegionSimSimi;
+    constructor(TeleBotToken: string, SimSimiAPIUrl: string, SimSimiAPIKeys: string, RegionSimSimi: string) {
+        this.TeleBotToken = TeleBotToken;
+        this.simSimiApiUrl = SimSimiAPIUrl;
+        this.simSimiApiKeys = SimSimiAPIKeys;
+        this.region = RegionSimSimi;
 
         this.bot = new TelegramBot(this.TeleBotToken, { polling: true });
     }
@@ -24,6 +21,9 @@ export default class ServiceApp {
         const chatId: number = msg.chat.id;
         try {
             const message: string = msg.text?.toString()!;
+            
+            if(message.startsWith("/")) return;
+            
             const response = await axios.post(this.simSimiApiUrl,
                 {
                     text: message,

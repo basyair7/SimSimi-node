@@ -1,6 +1,11 @@
-export interface Keys {
-    TeleBotToken: string,
+interface SimSimiKeysType {
     RegionSimSimi: string,
     SimSimiAPIUrl: string,
-    SimSimiApiKeys: string
+    SimSimiAPIKeys: string
 }
+
+interface TelegramKeysType {
+    TeleBotToken: string
+}
+
+export {SimSimiKeysType, TelegramKeysType};
