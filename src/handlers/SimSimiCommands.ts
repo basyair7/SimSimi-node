@@ -13,7 +13,7 @@ export class SimSimiCommand {
 
     }
 
-    public async handle(bot: TelegramBot, msg: TelegramBot.Message) {
+    protected async SimSimi_run(bot: TelegramBot, msg: TelegramBot.Message) {
         const chatId: number = msg.chat.id;
         try {
             const message: string = msg.text || "";

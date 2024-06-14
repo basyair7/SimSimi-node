@@ -1,23 +1,17 @@
 import * as path from "path"
 import * as fs from 'fs'
-import { CommandHandler } from "../handles/CommandHandler"
+import { CommandHandler, CommandInfo } from "../../handlers"
 import TelegramBot from "node-telegram-bot-api"
 
-interface commandInfo {
-    id: number;
-    name: string;
-    description: string;
-}
-
-export default class HelpCommand implements CommandHandler {
+class HelpCommand implements CommandHandler {
     readonly id = 1;
     readonly name = 'help';
     readonly description = 'Get help';
 
     async execute(bot: TelegramBot, msg: TelegramBot.Message, match: RegExpExecArray | null): Promise<void> {
-        const chatId = msg.chat.id;
-        const commandDir = path.join(__dirname, "../commands");
-        const commands: commandInfo[] = [];
+        const chatId: number = msg.chat.id;
+        const commandDir: string = __dirname;
+        const commands: CommandInfo[] = [];
         let helpMessage: string = "Here are some commands you can use:\n";
 
         try {
@@ -25,7 +19,7 @@ export default class HelpCommand implements CommandHandler {
             // console.log('Command files found:', files);
 
             // Filter hanya file yang merupakan modul command
-            const commandFiles = files.filter(file => file.endsWith('.ts'));
+            const commandFiles = files.filter(file => file.endsWith('.ts') && file !== "StartCommand.ts");
             // console.log('Filtered command files:', commandFiles);
 
             for (const file of commandFiles) {
@@ -65,3 +59,5 @@ export default class HelpCommand implements CommandHandler {
         bot.sendMessage(chatId, helpMessage);
     }
 }
+
+export default HelpCommand;

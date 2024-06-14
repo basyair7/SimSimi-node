@@ -1,17 +1,13 @@
 import TelegramBot from "node-telegram-bot-api"
-import { MessageHandler } from "../handles/MessageHandler"
-import { CommandHandler } from "../handles/CommandHandler"
-import HelpCommand from "../commands/HelpCommand"
-import DisableSimSimi from "../commands/DisableSimSimi"
-import EnableSimSimi from "../commands/EnableSimSimi"
-import StartCommand from "../commands/StartCommand"
+import * as handler from "../handlers"
+import * as commands from "../commands"
 
 export default class ServiceApp {
     private bot: TelegramBot;
     private TeleBotToken: string;
     private TeleBotUsername: string;
-    private messageHandler: MessageHandler;
-    private commands: CommandHandler[];
+    private messageHandler: handler.MessageHandler;
+    private commands: handler.CommandHandler[];
     private simsimiEnable: boolean;
 
     constructor(TeleBotToken: string, TeleBotUsername: string, SimSimiAPIUrl: string, SimSimiAPIKeys: string, RegionSimSimi: string) {
@@ -21,14 +17,14 @@ export default class ServiceApp {
         this.bot = new TelegramBot(this.TeleBotToken, { polling: true });
 
         // initializing message handler
-        this.messageHandler = new MessageHandler(SimSimiAPIUrl, SimSimiAPIKeys, RegionSimSimi);
+        this.messageHandler = new handler.MessageHandler(SimSimiAPIUrl, SimSimiAPIKeys, RegionSimSimi);
         
         // initializing commands
         this.commands = [
-            new HelpCommand(),
-            new StartCommand(),
-            new EnableSimSimi(),
-            new DisableSimSimi(),
+            new commands.HelpCommand(),
+            new commands.StartCommand(),
+            new commands.EnableSimSimi(),
+            new commands.DisableSimSimi(),
         ];
 
         this.simsimiEnable = false;
@@ -40,12 +36,15 @@ export default class ServiceApp {
 
     private initialize(): void {
         this.bot.on('polling_error', (error) => {
-            console.error('Polling error:', error);
+            console.error(`Polling error: ${error.name} - ${error.message}`);
+            const errorMsg = handler.ErrorHandler.getErrorMessage(error);
+            console.log(errorMsg);
+            process.exit(1);
         });
         this.commands.forEach(command => {
             this.bot.onText(this.commandRegExp(command.name), (msg, match) => {
-                if(command instanceof EnableSimSimi || command instanceof DisableSimSimi) {
-                    this.simsimiEnable = command instanceof EnableSimSimi;
+                if(command instanceof commands.EnableSimSimi || command instanceof commands.DisableSimSimi) {
+                    this.simsimiEnable = command instanceof commands.EnableSimSimi;
                 }
                 command.execute(this.bot, msg, match);
             });
