@@ -9,4 +9,4 @@ interface TelegramKeysType {
     TeleBotUsername: string
 }
 
-export { SimSimiKeysType, TelegramKeysType };
+export type { SimSimiKeysType, TelegramKeysType };
